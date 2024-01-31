@@ -144,10 +144,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as IEnumerable<object>;
             scopes.First().ToString().Should().Be("api1");
 
-            var cnf = payload["cnf"] as JObject;
+            var cnf = payload["cnf"] as JArray;
             cnf["x5t#S256"].ToString().Should().Be("foo");
         }
 

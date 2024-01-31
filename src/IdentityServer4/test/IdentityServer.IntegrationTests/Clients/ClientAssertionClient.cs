@@ -66,6 +66,7 @@ namespace IdentityServer.IntegrationTests.Clients
             var response = await _client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = TokenEndpoint,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
 
                 ClientId = ClientId,
                 ClientAssertion =
@@ -88,8 +89,9 @@ namespace IdentityServer.IntegrationTests.Clients
             var response = await _client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = TokenEndpoint,
-                ClientId = "client",
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
 
+                ClientId = "client",
                 ClientAssertion =
                 {
                     Type = OidcConstants.ClientAssertionTypes.JwtBearer,
@@ -110,6 +112,7 @@ namespace IdentityServer.IntegrationTests.Clients
             var response = await _client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = TokenEndpoint,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
 
                 ClientId = ClientId,
                 ClientAssertion =
@@ -127,6 +130,7 @@ namespace IdentityServer.IntegrationTests.Clients
             response = await _client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = TokenEndpoint,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
 
                 ClientId = ClientId,
                 ClientAssertion =
@@ -147,7 +151,8 @@ namespace IdentityServer.IntegrationTests.Clients
         {
             var response = await _client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
-                Address = TokenEndpoint,
+                Address = TokenEndpoint, 
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
 
                 ClientId = ClientId,
                 ClientAssertion =
@@ -173,6 +178,7 @@ namespace IdentityServer.IntegrationTests.Clients
             var response = await _client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = TokenEndpoint,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
 
                 ClientId = clientId,
                 ClientAssertion =
