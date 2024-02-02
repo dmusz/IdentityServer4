@@ -6,16 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
-using IdentityModel;
 using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
+using IdentityServer.IntegrationTests.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients
@@ -52,9 +50,9 @@ namespace IdentityServer.IntegrationTests.Clients
             // raw fields
             var fields = GetFields(response);
             fields.Should().Contain("string_value", "some_string");
-            ((Int64)fields["int_value"]).Should().Be(42);
+            fields["int_value"].Should().Be(42);
 
-            object temp;
+            JsonElement temp;
             fields.TryGetValue("identity_token", out temp).Should().BeFalse();
             fields.TryGetValue("refresh_token", out temp).Should().BeFalse();
             fields.TryGetValue("error", out temp).Should().BeFalse();
@@ -62,7 +60,7 @@ namespace IdentityServer.IntegrationTests.Clients
             fields.TryGetValue("token_type", out temp).Should().BeTrue();
             fields.TryGetValue("expires_in", out temp).Should().BeTrue();
 
-            var responseObject = fields["dto"] as JObject;
+            var responseObject = fields["dto"];
             responseObject.Should().NotBeNull();
 
             var responseDto = GetDto(responseObject);
@@ -83,7 +81,7 @@ namespace IdentityServer.IntegrationTests.Clients
             
 
             // token content
-            var payload = GetPayload(response);
+            var payload = response.GetPayload();
             payload.Count().Should().Be(12);
             payload.Should().Contain("iss", "https://idsvr4");
             payload.Should().Contain("client_id", "roclient");
@@ -92,10 +90,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"].EnumerateArray();
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"].EnumerateArray();
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("password");
         }
@@ -117,9 +115,9 @@ namespace IdentityServer.IntegrationTests.Clients
             // raw fields
             var fields = GetFields(response);
             fields.Should().Contain("string_value", "some_string");
-            ((Int64)fields["int_value"]).Should().Be(42);
+            fields["int_value"].Should().Be(42);
 
-            object temp;
+            JsonElement temp;
             fields.TryGetValue("identity_token", out temp).Should().BeFalse();
             fields.TryGetValue("refresh_token", out temp).Should().BeFalse();
             fields.TryGetValue("error", out temp).Should().BeTrue();
@@ -127,7 +125,7 @@ namespace IdentityServer.IntegrationTests.Clients
             fields.TryGetValue("token_type", out temp).Should().BeFalse();
             fields.TryGetValue("expires_in", out temp).Should().BeFalse();
 
-            var responseObject = fields["dto"] as JObject;
+            var responseObject = fields["dto"];
             responseObject.Should().NotBeNull();
 
             var responseDto = GetDto(responseObject);
@@ -171,9 +169,9 @@ namespace IdentityServer.IntegrationTests.Clients
             // raw fields
             var fields = GetFields(response);
             fields.Should().Contain("string_value", "some_string");
-            ((Int64)fields["int_value"]).Should().Be(42);
+            fields["int_value"].Should().Be(42);
 
-            object temp;
+            JsonElement temp;
             fields.TryGetValue("identity_token", out temp).Should().BeFalse();
             fields.TryGetValue("refresh_token", out temp).Should().BeFalse();
             fields.TryGetValue("error", out temp).Should().BeFalse();
@@ -181,7 +179,7 @@ namespace IdentityServer.IntegrationTests.Clients
             fields.TryGetValue("token_type", out temp).Should().BeTrue();
             fields.TryGetValue("expires_in", out temp).Should().BeTrue();
 
-            var responseObject = fields["dto"] as JObject;
+            var responseObject = fields["dto"];
             responseObject.Should().NotBeNull();
 
             var responseDto = GetDto(responseObject);
@@ -202,7 +200,7 @@ namespace IdentityServer.IntegrationTests.Clients
 
 
             // token content
-            var payload = GetPayload(response);
+            var payload = response.GetPayload();
             payload.Count().Should().Be(12);
             payload.Should().Contain("iss", "https://idsvr4");
             payload.Should().Contain("client_id", "client.custom");
@@ -211,10 +209,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"].EnumerateArray();
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"].EnumerateArray();
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
 
@@ -242,17 +240,17 @@ namespace IdentityServer.IntegrationTests.Clients
             // raw fields
             var fields = GetFields(response);
             fields.Should().Contain("string_value", "some_string");
-            ((Int64)fields["int_value"]).Should().Be(42);
+            fields["int_value"].Should().Be(42);
 
-            object temp;
-            fields.TryGetValue("identity_token", out temp).Should().BeFalse();
+            JsonElement temp;
+            fields.TryGetValue("identity_token", out temp).Should().Be(temp.ValueKind == JsonValueKind.True);
             fields.TryGetValue("refresh_token", out temp).Should().BeFalse();
             fields.TryGetValue("error", out temp).Should().BeTrue();
             fields.TryGetValue("error_description", out temp).Should().BeTrue();
             fields.TryGetValue("token_type", out temp).Should().BeFalse();
             fields.TryGetValue("expires_in", out temp).Should().BeFalse();
 
-            var responseObject = fields["dto"] as JObject;
+            var responseObject = fields["dto"];
             responseObject.Should().NotBeNull();
 
             var responseDto = GetDto(responseObject);
@@ -274,24 +272,15 @@ namespace IdentityServer.IntegrationTests.Clients
             response.RefreshToken.Should().BeNull();
         }
 
-        private CustomResponseDto GetDto(JObject responseObject)
+        private CustomResponseDto GetDto(JsonElement responseObject)
         {
             return responseObject.ToObject<CustomResponseDto>();
         }
 
-        private Dictionary<string, object> GetFields(TokenResponse response)
+        private Dictionary<string, JsonElement> GetFields(TokenResponse response)
         {
             var json = response.Json.GetRawText();
-            return JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-        }
-
-        private Dictionary<string, object> GetPayload(TokenResponse response)
-        {
-            var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                Encoding.UTF8.GetString(Base64Url.Decode(token)));
-
-            return dictionary;
+            return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
         }
     }
 }

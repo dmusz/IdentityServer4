@@ -6,18 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
-using IdentityModel;
 using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
 using IdentityServer.IntegrationTests.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients
@@ -175,9 +171,9 @@ namespace IdentityServer.IntegrationTests.Clients
 
             response.IsError.Should().BeFalse();
             
-            var payload = GetPayload(response);
+            var payload = response.GetPayload();
 
-            var scopes = ((JArray)payload["scope"]).Select(x => x.ToString()).ToArray();
+            var scopes = payload["scope"].EnumerateArray().Select(x => x.ToString()).ToArray();
             scopes.Length.Should().Be(5);
             scopes.Should().Contain("openid");
             scopes.Should().Contain("email");
@@ -185,7 +181,7 @@ namespace IdentityServer.IntegrationTests.Clients
             scopes.Should().Contain("api4.with.roles");
             scopes.Should().Contain("roles");
 
-            var roles = ((JArray)payload["role"]).Select(x => x.ToString()).ToArray();
+            var roles = payload["role"].EnumerateArray().Select(x => x.ToString()).ToArray();
             roles.Length.Should().Be(2);
             roles.Should().Contain("Geek");
             roles.Should().Contain("Developer");
@@ -201,15 +197,6 @@ namespace IdentityServer.IntegrationTests.Clients
             roles.Length.Should().Be(2);
             roles.Should().Contain("Geek");
             roles.Should().Contain("Developer");
-        }
-
-        private Dictionary<string, object> GetPayload(TokenResponse response)
-        {
-            var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                Encoding.UTF8.GetString(Base64Url.Decode(token)));
-
-            return dictionary;
         }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IO;
 using System.Security.Cryptography;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Xunit;
 
 namespace IdentityServer.UnitTests.Extensions
@@ -39,7 +39,7 @@ namespace IdentityServer.UnitTests.Extensions
                 qi = "w4KdmiDN1GtK71JxaasqmEKPNfV3v2KZDXKnfyhUsdx / idKbdTVjvMOkxFPJ4FqV4yIVn06f3QHTm4NEG18Diqxsrzd6kXQIHOa858tLsCcmt9FoGfrgCFgVceh3K / Zah / r8rl9Y61u0Z1kZumwMvFpFE + mVU01t9HgTEAVkHTc = ",
             };
 
-            var json = JsonConvert.SerializeObject(webKeyObject);
+            var json = JsonSerializer.Serialize(webKeyObject);
             JsonWebKey jsonWebKey = new JsonWebKey(json);
             SigningCredentials credentials = new SigningCredentials(jsonWebKey, jsonWebKey.Alg);
             identityServerBuilder.AddSigningCredential(credentials);

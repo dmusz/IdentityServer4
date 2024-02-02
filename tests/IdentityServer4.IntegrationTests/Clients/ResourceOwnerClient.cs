@@ -2,20 +2,16 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using IdentityModel;
 using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
+using IdentityServer.IntegrationTests.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients
@@ -55,7 +51,7 @@ namespace IdentityServer.IntegrationTests.Clients
             response.IdentityToken.Should().BeNull();
             response.RefreshToken.Should().BeNull();
 
-            var payload = GetPayload(response);
+            var payload = response.GetPayload();
 
             payload.Count().Should().Be(12);
             payload.Should().Contain("iss", "https://idsvr4");
@@ -67,11 +63,11 @@ namespace IdentityServer.IntegrationTests.Clients
             
             payload["aud"].Should().Be("api");
 
-            var scopes = ((JArray)payload["scope"]).Select(x => x.ToString());
+            var scopes = payload["scope"].EnumerateArray().Select(x => x.ToString()).ToArray();
             scopes.Count().Should().Be(1);
             scopes.Should().Contain("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"].EnumerateArray();
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
         }
@@ -95,7 +91,7 @@ namespace IdentityServer.IntegrationTests.Clients
             response.IdentityToken.Should().BeNull();
             response.RefreshToken.Should().NotBeNull();
 
-            var payload = GetPayload(response);
+            var payload = response.GetPayload();
             
             payload.Should().Contain("iss", "https://idsvr4");
             payload.Should().Contain("client_id", "roclient");
@@ -104,11 +100,11 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"].EnumerateArray();
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = ((JArray)payload["scope"]).Select(x => x.ToString());
+            var scopes = payload["scope"].EnumerateArray().Select(x => x.ToString()).ToArray();
             scopes.Count().Should().Be(8);
 
             // {[  "address",  "api1",  "api2", "api4.with.roles", "email",  "offline_access",  "openid", "role"]}
@@ -143,7 +139,7 @@ namespace IdentityServer.IntegrationTests.Clients
             response.IdentityToken.Should().BeNull();
             response.RefreshToken.Should().BeNull();
 
-            var payload = GetPayload(response);
+            var payload = response.GetPayload();
 
             payload.Count().Should().Be(12);
             payload.Should().Contain("iss", "https://idsvr4");
@@ -155,11 +151,11 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"].EnumerateArray();
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = ((JArray)payload["scope"]).Select(x=>x.ToString());
+            var scopes = payload["scope"].EnumerateArray().Select(x => x.ToString()).ToArray();
             scopes.Count().Should().Be(3);
             scopes.Should().Contain("api1");
             scopes.Should().Contain("email");
@@ -186,7 +182,7 @@ namespace IdentityServer.IntegrationTests.Clients
             response.IdentityToken.Should().BeNull();
             response.RefreshToken.Should().NotBeNullOrWhiteSpace();
 
-            var payload = GetPayload(response);
+            var payload = response.GetPayload();
 
             payload.Count().Should().Be(12);
             payload.Should().Contain("iss", "https://idsvr4");
@@ -198,11 +194,11 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"].EnumerateArray();
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = ((JArray)payload["scope"]).Select(x => x.ToString());
+            var scopes = payload["scope"].EnumerateArray().Select(x => x.ToString()).ToArray();
             scopes.Count().Should().Be(4);
             scopes.Should().Contain("api1");
             scopes.Should().Contain("email");
@@ -266,16 +262,6 @@ namespace IdentityServer.IntegrationTests.Clients
             response.ErrorType.Should().Be(ResponseErrorType.Protocol);
             response.HttpStatusCode.Should().Be(HttpStatusCode.BadRequest);
             response.Error.Should().Be("invalid_grant");
-        }
-
-
-        private static Dictionary<string, object> GetPayload(IdentityModel.Client.TokenResponse response)
-        {
-            var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
-                Encoding.UTF8.GetString(Base64Url.Decode(token)));
-
-            return dictionary;
         }
     }
 }
