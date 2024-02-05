@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using System;
 using System.Linq;
 using System.Security.Claims;
 using IdentityServer4.EntityFramework.Entities;
@@ -39,19 +38,19 @@ public static class ClientMappers
             RequireConsent = entity.RequireConsent,
             AllowRememberConsent = entity.AllowRememberConsent,
             AlwaysIncludeUserClaimsInIdToken = entity.AlwaysIncludeUserClaimsInIdToken,
-            AllowedGrantTypes = entity.AllowedGrantTypes?.Select(x => x.GrantType).ToArray(),
+            AllowedGrantTypes = entity.AllowedGrantTypes?.Select(x => x.GrantType).ToArray() ?? [],
             RequirePkce = entity.RequirePkce,
             AllowPlainTextPkce = entity.AllowPlainTextPkce,
             RequireRequestObject = entity.RequireRequestObject,
             AllowAccessTokensViaBrowser = entity.AllowAccessTokensViaBrowser,
-            RedirectUris = entity.RedirectUris?.Select(x => x.RedirectUri).ToArray(),
-            PostLogoutRedirectUris = entity.PostLogoutRedirectUris?.Select(x => x.PostLogoutRedirectUri).ToArray(),
+            RedirectUris = entity.RedirectUris?.Select(x => x.RedirectUri).ToArray() ?? [],
+            PostLogoutRedirectUris = entity.PostLogoutRedirectUris?.Select(x => x.PostLogoutRedirectUri).ToArray() ?? [],
             FrontChannelLogoutUri = entity.FrontChannelLogoutUri,
             FrontChannelLogoutSessionRequired = entity.FrontChannelLogoutSessionRequired,
             BackChannelLogoutUri = entity.BackChannelLogoutUri,
             BackChannelLogoutSessionRequired = entity.BackChannelLogoutSessionRequired,
             AllowOfflineAccess = entity.AllowOfflineAccess,
-            AllowedScopes = entity.AllowedScopes?.Select(x => x.Scope).ToArray(),
+            AllowedScopes = entity.AllowedScopes?.Select(x => x.Scope).ToArray() ?? [],
             IdentityTokenLifetime = entity.IdentityTokenLifetime,
             AllowedIdentityTokenSigningAlgorithms = MappingHelpers.Convert(entity.AllowedIdentityTokenSigningAlgorithms),
             AccessTokenLifetime = entity.AccessTokenLifetime,
@@ -64,19 +63,19 @@ public static class ClientMappers
             RefreshTokenExpiration = entity.RefreshTokenExpiration,
             AccessTokenType = entity.AccessTokenType,
             EnableLocalLogin = entity.EnableLocalLogin,
-            IdentityProviderRestrictions = entity.IdentityProviderRestrictions?.Select(x => x.Provider).ToArray(),
+            IdentityProviderRestrictions = entity.IdentityProviderRestrictions?.Select(x => x.Provider).ToArray() ?? [],
             IncludeJwtId = entity.IncludeJwtId,
             Claims = entity.Claims?.Select(x => new Models.ClientClaim
             {
                 Type = x.Type,
                 Value = x.Value,
                 ValueType = ClaimValueTypes.String
-            }).ToArray(),
+            }).ToArray() ?? [],
             AlwaysSendClientClaims = entity.AlwaysSendClientClaims,
             ClientClaimsPrefix = entity.ClientClaimsPrefix,
             PairWiseSubjectSalt = entity.PairWiseSubjectSalt,
-            AllowedCorsOrigins = entity.AllowedCorsOrigins?.Select(x => x.Origin).ToArray(),
-            Properties = entity.Properties?.ToDictionary(x => x.Key, x=> x.Value),
+            AllowedCorsOrigins = entity.AllowedCorsOrigins?.Select(x => x.Origin).ToArray() ?? [],
+            Properties = entity.Properties?.ToDictionary(x => x.Key, x=> x.Value) ?? [],
             UserSsoLifetime = entity.UserSsoLifetime,
             UserCodeType = entity.UserCodeType,
             DeviceCodeLifetime = entity.DeviceCodeLifetime
@@ -98,7 +97,7 @@ public static class ClientMappers
             Enabled = model.Enabled,
             ClientId = model.ClientId,
             ProtocolType = model.ProtocolType,
-            ClientSecrets = model.ClientSecrets?.ToModels<ClientSecret>(),
+            ClientSecrets = model.ClientSecrets.ToModels<ClientSecret>(),
             RequireClientSecret = model.RequireClientSecret,
             ClientName = model.ClientName,
             Description = model.Description,
@@ -110,7 +109,7 @@ public static class ClientMappers
             AllowedGrantTypes = model.AllowedGrantTypes?.Select(x => new ClientGrantType
             {
                 GrantType = x
-            }).ToList(),
+            }).ToList()  ?? [],
             RequirePkce = model.RequirePkce,
             AllowPlainTextPkce = model.AllowPlainTextPkce,
             RequireRequestObject = model.RequireRequestObject,
@@ -118,11 +117,11 @@ public static class ClientMappers
             RedirectUris = model.RedirectUris?.Select(x => new ClientRedirectUri
             {
                 RedirectUri = x
-            }).ToList(),
+            }).ToList()  ?? [],
             PostLogoutRedirectUris = model.PostLogoutRedirectUris?.Select(x => new ClientPostLogoutRedirectUri
             {
                 PostLogoutRedirectUri = x
-            }).ToList(),
+            }).ToList()  ?? [],
             FrontChannelLogoutUri = model.FrontChannelLogoutUri,
             FrontChannelLogoutSessionRequired = model.FrontChannelLogoutSessionRequired,
             BackChannelLogoutUri = model.BackChannelLogoutUri,
@@ -131,7 +130,7 @@ public static class ClientMappers
             AllowedScopes = model.AllowedScopes?.Select(x => new ClientScope
             {
                 Scope = x
-            }).ToList(),
+            }).ToList()  ?? [],
             IdentityTokenLifetime = model.IdentityTokenLifetime,
             AllowedIdentityTokenSigningAlgorithms = MappingHelpers.Convert(model.AllowedIdentityTokenSigningAlgorithms),
             AccessTokenLifetime = model.AccessTokenLifetime,
@@ -147,25 +146,25 @@ public static class ClientMappers
             IdentityProviderRestrictions = model.IdentityProviderRestrictions?.Select(x => new ClientIdPRestriction
             {
                 Provider = x
-            }).ToList(),
+            }).ToList()  ?? [],
             IncludeJwtId = model.IncludeJwtId,
             Claims = model.Claims?.Select(x => new ClientClaim
             {
                 Type = x.Type,
                 Value = x.Value
-            }).ToList(),
+            }).ToList()  ?? [],
             AlwaysSendClientClaims = model.AlwaysSendClientClaims,
             ClientClaimsPrefix = model.ClientClaimsPrefix,
             PairWiseSubjectSalt = model.PairWiseSubjectSalt,
             AllowedCorsOrigins = model.AllowedCorsOrigins?.Select(x => new ClientCorsOrigin
             {
                 Origin = x
-            }).ToList(),
-            Properties = model.Properties.Select(x => new ClientProperty
+            }).ToList()  ?? [],
+            Properties = model.Properties?.Select(x => new ClientProperty
             {
                 Key = x.Key,
                 Value = x.Value
-            }).ToList(),
+            }).ToList()  ?? [],
             UserSsoLifetime = model.UserSsoLifetime,
             UserCodeType = model.UserCodeType,
             DeviceCodeLifetime = model.DeviceCodeLifetime

@@ -33,9 +33,9 @@ public static class ApiResourceMappers
             AllowedAccessTokenSigningAlgorithms = MappingHelpers.Convert(entity.AllowedAccessTokenSigningAlgorithms),
             ShowInDiscoveryDocument = entity.ShowInDiscoveryDocument,
             ApiSecrets = entity.Secrets.ToModels(),
-            Scopes = entity.Scopes.Select(x => x.Scope).ToArray(),
-            UserClaims = entity.UserClaims?.Select(x => x.Type).ToArray(),
-            Properties = entity.Properties?.ToDictionary(x => x.Key, x => x.Value)
+            Scopes = entity.Scopes?.Select(x => x.Scope).ToArray() ?? [],
+            UserClaims = entity.UserClaims?.Select(x => x.Type).ToArray() ?? [],
+            Properties = entity.Properties?.ToDictionary(x => x.Key, x => x.Value) ?? []
         };
     }
 
@@ -58,19 +58,19 @@ public static class ApiResourceMappers
             AllowedAccessTokenSigningAlgorithms = MappingHelpers.Convert(model.AllowedAccessTokenSigningAlgorithms),
             ShowInDiscoveryDocument = model.ShowInDiscoveryDocument,
             Secrets = model.ApiSecrets.ToModels<ApiResourceSecret>(),
-            Scopes = model.Scopes.Select(x => new ApiResourceScope
+            Scopes = model.Scopes?.Select(x => new ApiResourceScope
             {
                 Scope = x
-            }).ToList(),
+            }).ToList() ?? [],
             UserClaims = model.UserClaims?.Select(x => new ApiResourceClaim
             {
                 Type = x
-            }).ToList(),
+            }).ToList() ?? [],
             Properties = model.Properties?.Select(x => new ApiResourceProperty
             {
                 Key = x.Key,
                 Value = x.Value
-            }).ToList()
+            }).ToList() ?? []
         };
     }
 

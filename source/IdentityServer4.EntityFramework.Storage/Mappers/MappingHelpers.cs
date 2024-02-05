@@ -15,7 +15,7 @@ public static class MappingHelpers
             Description = x.Description,
             Expiration = x.Expiration,
             Type = x.Type
-        }).ToArray();
+        }).ToArray() ?? [];
     }   
     
     public static List<T> ToModels<T>(this IEnumerable<Secret> entities) where T : Entities.Secret, new()
@@ -26,7 +26,7 @@ public static class MappingHelpers
             Description = x.Description,
             Expiration = x.Expiration,
             Type = x.Type
-        }).ToList();
+        }).ToList() ?? [];
     }
 
     public static string Convert(ICollection<string> sourceMember)

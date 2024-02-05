@@ -31,8 +31,8 @@ public static class IdentityResourceMappers
             Required = entity.Required,
             Emphasize = entity.Emphasize,
             ShowInDiscoveryDocument = entity.ShowInDiscoveryDocument,
-            UserClaims = entity.UserClaims?.Select(x => x.Type).ToArray(),
-            Properties = entity.Properties?.ToDictionary(x => x.Key, x => x.Value)
+            UserClaims = entity.UserClaims?.Select(x => x.Type).ToArray() ?? [],
+            Properties = entity.Properties?.ToDictionary(x => x.Key, x => x.Value) ?? []
         };
     }
 
@@ -58,12 +58,12 @@ public static class IdentityResourceMappers
             UserClaims = model.UserClaims?.Select(x => new IdentityResourceClaim
             {
                 Type = x
-            }).ToList(),
+            }).ToList() ?? [],
             Properties = model.Properties?.Select(x => new IdentityResourceProperty
             {
                 Key = x.Key,
                 Value = x.Value
-            }).ToList()
+            }).ToList() ?? []
         };
     }
 }
