@@ -1,43 +1,78 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using AutoMapper;
+using System.Linq;
 using IdentityServer4.EntityFramework.Entities;
+using IdentityServer4.EntityFramework.Storage.Mappers;
+using ApiResource = IdentityServer4.Models.ApiResource;
 
-namespace IdentityServer4.EntityFramework.Mappers
+namespace IdentityServer4.EntityFramework.Mappers;
+
+/// <summary>
+///     Extension methods to map to/from entity/model for API resources.
+/// </summary>
+public static class ApiResourceMappers
 {
     /// <summary>
-    /// Extension methods to map to/from entity/model for API resources.
+    ///     Maps an entity to a model.
     /// </summary>
-    public static class ApiResourceMappers
+    /// <param name="entity">The entity.</param>
+    /// <returns></returns>
+    public static Models.ApiResource ToModel(this Entities.ApiResource entity)
     {
-        static ApiResourceMappers()
-        {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<ApiResourceMapperProfile>())
-                .CreateMapper();
-        }
+        if (entity == null)
+            return null;
 
-        internal static IMapper Mapper { get; }
-
-        /// <summary>
-        /// Maps an entity to a model.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <returns></returns>
-        public static Models.ApiResource ToModel(this ApiResource entity)
+        return new ApiResource
         {
-            return entity == null ? null : Mapper.Map<Models.ApiResource>(entity);
-        }
-
-        /// <summary>
-        /// Maps a model to an entity.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns></returns>
-        public static ApiResource ToEntity(this Models.ApiResource model)
-        {
-            return model == null ? null : Mapper.Map<ApiResource>(model);
-        }
+            Enabled = entity.Enabled,
+            Name = entity.Name,
+            DisplayName = entity.DisplayName,
+            Description = entity.Description,
+            AllowedAccessTokenSigningAlgorithms = MappingHelpers.Convert(entity.AllowedAccessTokenSigningAlgorithms),
+            ShowInDiscoveryDocument = entity.ShowInDiscoveryDocument,
+            ApiSecrets = entity.Secrets.ToModels(),
+            Scopes = entity.Scopes.Select(x => x.Scope).ToArray(),
+            UserClaims = entity.UserClaims?.Select(x => x.Type).ToArray(),
+            Properties = entity.Properties?.ToDictionary(x => x.Key, x => x.Value)
+        };
     }
+
+    /// <summary>
+    ///     Maps a model to an entity.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <returns></returns>
+    public static Entities.ApiResource ToEntity(this ApiResource model)
+    {
+        if (model == null)
+            return null;
+
+        return new Entities.ApiResource
+        {
+            Enabled = model.Enabled,
+            Name = model.Name,
+            DisplayName = model.DisplayName,
+            Description = model.Description,
+            AllowedAccessTokenSigningAlgorithms = MappingHelpers.Convert(model.AllowedAccessTokenSigningAlgorithms),
+            ShowInDiscoveryDocument = model.ShowInDiscoveryDocument,
+            Secrets = model.ApiSecrets.ToModels<ApiResourceSecret>(),
+            Scopes = model.Scopes.Select(x => new ApiResourceScope
+            {
+                Scope = x
+            }).ToList(),
+            UserClaims = model.UserClaims?.Select(x => new ApiResourceClaim
+            {
+                Type = x
+            }).ToList(),
+            Properties = model.Properties?.Select(x => new ApiResourceProperty
+            {
+                Key = x.Key,
+                Value = x.Value
+            }).ToList()
+        };
+    }
+
+
 }

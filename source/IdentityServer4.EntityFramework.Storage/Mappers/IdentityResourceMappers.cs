@@ -1,43 +1,69 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using AutoMapper;
+using System.Linq;
 using IdentityServer4.EntityFramework.Entities;
 
-namespace IdentityServer4.EntityFramework.Mappers
+namespace IdentityServer4.EntityFramework.Mappers;
+
+/// <summary>
+/// Extension methods to map to/from entity/model for identity resources.
+/// </summary>
+public static class IdentityResourceMappers
 {
     /// <summary>
-    /// Extension methods to map to/from entity/model for identity resources.
+    /// Maps an entity to a model.
     /// </summary>
-    public static class IdentityResourceMappers
+    /// <param name="entity">The entity.</param>
+    /// <returns></returns>
+    public static Models.IdentityResource ToModel(this IdentityResource entity)
     {
-        static IdentityResourceMappers()
-        {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<IdentityResourceMapperProfile>())
-                .CreateMapper();
-        }
+        if (entity == null)
+            return null;
 
-        internal static IMapper Mapper { get; }
-
-        /// <summary>
-        /// Maps an entity to a model.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <returns></returns>
-        public static Models.IdentityResource ToModel(this IdentityResource entity)
+        return new Models.IdentityResource
         {
-            return entity == null ? null : Mapper.Map<Models.IdentityResource>(entity);
-        }
+            Enabled = entity.Enabled,
+            Name = entity.Name,
+            DisplayName = entity.DisplayName,
+            Description = entity.Description,
+            Required = entity.Required,
+            Emphasize = entity.Emphasize,
+            ShowInDiscoveryDocument = entity.ShowInDiscoveryDocument,
+            UserClaims = entity.UserClaims?.Select(x => x.Type).ToArray(),
+            Properties = entity.Properties?.ToDictionary(x => x.Key, x => x.Value)
+        };
+    }
 
-        /// <summary>
-        /// Maps a model to an entity.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns></returns>
-        public static IdentityResource ToEntity(this Models.IdentityResource model)
+    /// <summary>
+    /// Maps a model to an entity.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <returns></returns>
+    public static IdentityResource ToEntity(this Models.IdentityResource model)
+    {
+        if (model == null)
+            return null;
+
+        return new IdentityResource
         {
-            return model == null ? null : Mapper.Map<IdentityResource>(model);
-        }
+            Enabled = model.Enabled,
+            Name = model.Name,
+            DisplayName = model.DisplayName,
+            Description = model.Description,
+            Required = model.Required,
+            Emphasize = model.Emphasize,
+            ShowInDiscoveryDocument = model.ShowInDiscoveryDocument,
+            UserClaims = model.UserClaims?.Select(x => new IdentityResourceClaim
+            {
+                Type = x
+            }).ToList(),
+            Properties = model.Properties?.Select(x => new IdentityResourceProperty
+            {
+                Key = x.Key,
+                Value = x.Value
+            }).ToList()
+        };
     }
 }

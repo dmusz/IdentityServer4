@@ -12,12 +12,6 @@ namespace IdentityServer4.EntityFramework.UnitTests.Mappers
     public class PersistedGrantMappersTests
     {
         [Fact]
-        public void PersistedGrantAutomapperConfigurationIsValid()
-        {
-            PersistedGrantMappers.Mapper.ConfigurationProvider.AssertConfigurationIsValid();
-        }
-
-        [Fact]
         public void CanMap()
         {
             var model = new PersistedGrant()

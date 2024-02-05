@@ -14,12 +14,6 @@ namespace IdentityServer4.EntityFramework.UnitTests.Mappers
     public class ClientMappersTests
     {
         [Fact]
-        public void AutomapperConfigurationIsValid()
-        {
-            ClientMappers.Mapper.ConfigurationProvider.AssertConfigurationIsValid();
-        }
-
-        [Fact]
         public void Can_Map()
         {
             var model = new Client();
