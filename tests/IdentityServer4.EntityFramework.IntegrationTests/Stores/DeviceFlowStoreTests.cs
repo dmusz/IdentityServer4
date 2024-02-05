@@ -127,7 +127,7 @@ namespace IdentityServer4.EntityFramework.IntegrationTests.Stores
                 if (options.Extensions.All(x => x.GetType() != typeof(InMemoryOptionsExtension)))
                 {
                     await Assert.ThrowsAsync<DbUpdateException>(() =>
-                        store.StoreDeviceAuthorizationAsync($"device_{Guid.NewGuid().ToString()}", existingUserCode, deviceCodeData));
+                        store.StoreDeviceAuthorizationAsync($"device_{Guid.NewGuid()}", existingUserCode, deviceCodeData));
                 }
             }
         }
@@ -226,7 +226,7 @@ namespace IdentityServer4.EntityFramework.IntegrationTests.Stores
             using (var context = new PersistedGrantDbContext(options, StoreOptions))
             {
                 var store = new DeviceFlowStore(context, new PersistentGrantSerializer(), FakeLogger<DeviceFlowStore>.Create());
-                var code = await store.FindByUserCodeAsync($"user_{Guid.NewGuid().ToString()}");
+                var code = await store.FindByUserCodeAsync($"user_{Guid.NewGuid()}");
                 code.Should().BeNull();
             }
         }
