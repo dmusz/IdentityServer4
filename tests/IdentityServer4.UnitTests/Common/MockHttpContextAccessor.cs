@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
@@ -19,15 +19,17 @@ namespace IdentityServer.UnitTests.Common
 
         public MockAuthenticationSchemeProvider Schemes { get; set; } = new MockAuthenticationSchemeProvider();
 
-        public MockHttpContextAccessor(
-            IdentityServerOptions options = null,
+        public MockHttpContextAccessor(IdentityServerOptions options = null,
             IUserSession userSession = null,
-            IMessageStore<LogoutNotificationContext> endSessionStore = null)
+            IMessageStore<LogoutNotificationContext> endSessionStore = null,
+            ITimeProvider timeProvider = null)
         {
+            timeProvider ??= new StubClock();
             options = options ?? TestIdentityServerOptions.Create();
 
             var services = new ServiceCollection();
             services.AddSingleton(options);
+            services.AddSingleton<ITimeProvider>(timeProvider);
 
             services.AddSingleton<IAuthenticationSchemeProvider>(Schemes);
             services.AddSingleton<IAuthenticationService>(AuthenticationService);

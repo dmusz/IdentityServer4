@@ -8,7 +8,6 @@ using IdentityModel;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 
 namespace IdentityServer4.Validation
@@ -21,7 +20,7 @@ namespace IdentityServer4.Validation
         private readonly IDeviceFlowCodeService _devices;
         private readonly IProfileService _profile;
         private readonly IDeviceFlowThrottlingService _throttlingService;
-        private readonly ISystemClock _systemClock;
+        private readonly ITimeProvider _systemClock;
         private readonly ILogger<DeviceCodeValidator> _logger;
 
         /// <summary>
@@ -36,7 +35,7 @@ namespace IdentityServer4.Validation
             IDeviceFlowCodeService devices,
             IProfileService profile,
             IDeviceFlowThrottlingService throttlingService,
-            ISystemClock systemClock,
+            ITimeProvider systemClock,
             ILogger<DeviceCodeValidator> logger)
         {
             _devices = devices;

@@ -9,9 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
-using IdentityServer4.Logging.Models;
 using IdentityServer4.Validation;
-using Microsoft.AspNetCore.Authentication;
 
 namespace IdentityServer4.Services
 {
@@ -38,7 +36,7 @@ namespace IdentityServer4.Services
         /// <summary>
         /// The clock
         /// </summary>
-        protected ISystemClock Clock { get; }
+        protected ITimeProvider Clock { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultRefreshTokenService" /> class.
@@ -48,7 +46,7 @@ namespace IdentityServer4.Services
         /// <param name="clock">The clock</param>
         /// <param name="logger">The logger</param>
         public DefaultRefreshTokenService(IRefreshTokenStore refreshTokenStore, IProfileService profile,
-            ISystemClock clock,
+            ITimeProvider clock,
             ILogger<DefaultRefreshTokenService> logger)
         {
             RefreshTokenStore = refreshTokenStore;

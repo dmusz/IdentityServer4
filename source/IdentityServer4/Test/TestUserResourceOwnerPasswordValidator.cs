@@ -6,7 +6,7 @@ using IdentityModel;
 using IdentityServer4.Validation;
 using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Authentication;
+using IdentityServer4.Services;
 
 namespace IdentityServer4.Test
 {
@@ -17,14 +17,14 @@ namespace IdentityServer4.Test
     public class TestUserResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
         private readonly TestUserStore _users;
-        private readonly ISystemClock _clock;
+        private readonly ITimeProvider _clock;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestUserResourceOwnerPasswordValidator"/> class.
         /// </summary>
         /// <param name="users">The users.</param>
         /// <param name="clock">The clock.</param>
-        public TestUserResourceOwnerPasswordValidator(TestUserStore users, ISystemClock clock)
+        public TestUserResourceOwnerPasswordValidator(TestUserStore users, ITimeProvider clock)
         {
             _users = users;
             _clock = clock;

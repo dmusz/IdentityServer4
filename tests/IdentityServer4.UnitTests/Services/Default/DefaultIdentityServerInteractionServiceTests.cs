@@ -29,14 +29,13 @@ namespace IdentityServer.UnitTests.Services.Default
         private MockPersistedGrantService _mockPersistedGrantService = new MockPersistedGrantService();
         private MockUserSession _mockUserSession = new MockUserSession();
         private MockReturnUrlParser _mockReturnUrlParser = new MockReturnUrlParser();
-
+        private  ITimeProvider _timeProvider = new StubClock();
         private ResourceValidationResult _resourceValidationResult;
 
         public DefaultIdentityServerInteractionServiceTests()
         {
-            _mockMockHttpContextAccessor = new MockHttpContextAccessor(_options, _mockUserSession, _mockEndSessionStore);
-
-            _subject = new DefaultIdentityServerInteractionService(new StubClock(), 
+            _mockMockHttpContextAccessor = new MockHttpContextAccessor(_options, _mockUserSession, _mockEndSessionStore, _timeProvider);
+            _subject = new DefaultIdentityServerInteractionService(_timeProvider, 
                 _mockMockHttpContextAccessor,
                 _mockLogoutMessageStore,
                 _mockErrorMessageStore,

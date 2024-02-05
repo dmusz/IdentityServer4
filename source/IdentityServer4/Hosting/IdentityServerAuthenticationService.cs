@@ -28,7 +28,7 @@ namespace IdentityServer4.Hosting
     {
         private readonly IAuthenticationService _inner;
         private readonly IAuthenticationSchemeProvider _schemes;
-        private readonly ISystemClock _clock;
+        private readonly ITimeProvider _clock;
         private readonly IUserSession _session;
         private readonly IBackChannelLogoutService _backChannelLogoutService;
         private readonly IdentityServerOptions _options;
@@ -37,7 +37,7 @@ namespace IdentityServer4.Hosting
         public IdentityServerAuthenticationService(
             Decorator<IAuthenticationService> decorator,
             IAuthenticationSchemeProvider schemes,
-            ISystemClock clock,
+            ITimeProvider clock,
             IUserSession session,
             IBackChannelLogoutService backChannelLogoutService,
             IdentityServerOptions options,

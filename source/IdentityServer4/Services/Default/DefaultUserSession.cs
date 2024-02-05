@@ -36,7 +36,7 @@ namespace IdentityServer4.Services
         /// <summary>
         /// The clock
         /// </summary>
-        protected readonly ISystemClock Clock;
+        protected readonly ITimeProvider Clock;
 
         /// <summary>
         /// The logger
@@ -97,7 +97,7 @@ namespace IdentityServer4.Services
             IHttpContextAccessor httpContextAccessor,
             IAuthenticationHandlerProvider handlers,
             IdentityServerOptions options,
-            ISystemClock clock,
+            ITimeProvider clock,
             ILogger<IUserSession> logger)
         {
             HttpContextAccessor = httpContextAccessor;

@@ -32,7 +32,7 @@ namespace IdentityServer4.Validation
         private readonly IClientStore _clients;
         private readonly IProfileService _profile;
         private readonly IKeyMaterialService _keys;
-        private readonly ISystemClock _clock;
+        private readonly ITimeProvider _clock;
         private readonly TokenValidationLog _log;
 
         public TokenValidator(
@@ -44,7 +44,7 @@ namespace IdentityServer4.Validation
             IRefreshTokenStore refreshTokenStore,
             ICustomTokenValidator customValidator,
             IKeyMaterialService keys,
-            ISystemClock clock,
+            ITimeProvider clock,
             ILogger<TokenValidator> logger)
         {
             _options = options;

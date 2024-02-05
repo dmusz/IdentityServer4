@@ -4,7 +4,6 @@
 
 using IdentityModel;
 using IdentityServer4.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using IdentityServer4.Configuration;
+using IdentityServer4.Services;
 using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityServer4.Extensions
@@ -32,7 +32,7 @@ namespace IdentityServer4.Extensions
         /// <returns></returns>
         /// <exception cref="Exception">
         /// </exception>
-        public static JwtPayload CreateJwtPayload(this Token token, ISystemClock clock, IdentityServerOptions options, ILogger logger)
+        public static JwtPayload CreateJwtPayload(this Token token, ITimeProvider clock, IdentityServerOptions options, ILogger logger)
         {
             var payload = new JwtPayload(
                 token.Issuer,
