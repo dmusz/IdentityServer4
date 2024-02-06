@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
@@ -65,10 +65,8 @@ namespace IdentityServer4.Hosting
                         _logger.LogDebug("CorsPolicyService allowed origin: {origin}", origin);
                         return Allow(origin);
                     }
-                    else
-                    {
-                        _logger.LogWarning("CorsPolicyService did not allow origin: {origin}", origin);
-                    }
+
+                    _logger.LogWarning("CorsPolicyService did not allow origin: {origin}", origin);
                 }
                 else
                 {

@@ -6,7 +6,6 @@ using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace IdentityServer4.Hosting.FederatedSignOut
@@ -88,7 +87,7 @@ namespace IdentityServer4.Hosting.FederatedSignOut
 
             if (_context.Response.Body.CanWrite)
             {
-                var iframe = String.Format(IframeHtml, iframeUrl);
+                var iframe = string.Format(IframeHtml, iframeUrl);
                 _context.Response.ContentType = "text/html";
                 await _context.Response.WriteAsync(iframe);
                 await _context.Response.Body.FlushAsync();

@@ -37,7 +37,7 @@ namespace IdentityServer4.Endpoints.Results
 
         private void Init(HttpContext context)
         {
-            _options = _options ?? context.RequestServices.GetRequiredService<IdentityServerOptions>();
+            _options ??= context.RequestServices.GetRequiredService<IdentityServerOptions>();
         }
 
         public async Task ExecuteAsync(HttpContext context)

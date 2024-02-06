@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
@@ -15,7 +15,7 @@ namespace IdentityServer4.Extensions
     {
         public static IDictionary<string, string[]> ToFullDictionary(this NameValueCollection source)
         {
-            return source.AllKeys.ToDictionary(k => k, k => source.GetValues(k));
+            return source.AllKeys.ToDictionary(k => k, source.GetValues);
         }
 
         public static NameValueCollection FromFullDictionary(this IDictionary<string, string[]> source)
@@ -37,7 +37,7 @@ namespace IdentityServer4.Extensions
         {
             if (collection.Count == 0)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             var builder = new StringBuilder(128);
@@ -47,7 +47,7 @@ namespace IdentityServer4.Extensions
                 var values = collection.GetValues(name);
                 if (values == null || values.Length == 0)
                 {
-                    first = AppendNameValuePair(builder, first, true, name, String.Empty);
+                    first = AppendNameValuePair(builder, first, true, name, string.Empty);
                 }
                 else
                 {
@@ -139,10 +139,10 @@ namespace IdentityServer4.Extensions
 
         private static bool AppendNameValuePair(StringBuilder builder, bool first, bool urlEncode, string name, string value)
         {
-            var effectiveName = name ?? String.Empty;
+            var effectiveName = name ?? string.Empty;
             var encodedName = urlEncode ? UrlEncoder.Default.Encode(effectiveName) : effectiveName;
 
-            var effectiveValue = value ?? String.Empty;
+            var effectiveValue = value ?? string.Empty;
             var encodedValue = urlEncode ? UrlEncoder.Default.Encode(effectiveValue) : effectiveValue;
             encodedValue = ConvertFormUrlEncodedSpacesToUrlEncodedSpaces(encodedValue);
 
@@ -156,7 +156,7 @@ namespace IdentityServer4.Extensions
             }
 
             builder.Append(encodedName);
-            if (!String.IsNullOrEmpty(encodedValue))
+            if (!string.IsNullOrEmpty(encodedValue))
             {
                 builder.Append("=");
                 builder.Append(encodedValue);

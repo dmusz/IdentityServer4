@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
@@ -23,13 +23,11 @@ namespace IdentityServer4.Models
         {
             if (input.IsMissing()) return string.Empty;
 
-            using (var sha = SHA256.Create())
-            {
-                var bytes = Encoding.UTF8.GetBytes(input);
-                var hash = sha.ComputeHash(bytes);
+            using var sha = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(input);
+            var hash = sha.ComputeHash(bytes);
 
-                return Convert.ToBase64String(hash);
-            }
+            return Convert.ToBase64String(hash);
         }
 
         /// <summary>
@@ -44,10 +42,8 @@ namespace IdentityServer4.Models
                 return null;
             }
 
-            using (var sha = SHA256.Create())
-            {
-                return sha.ComputeHash(input);
-            }
+            using var sha = SHA256.Create();
+            return sha.ComputeHash(input);
         }
 
         /// <summary>
@@ -59,13 +55,11 @@ namespace IdentityServer4.Models
         {
             if (input.IsMissing()) return string.Empty;
 
-            using (var sha = SHA512.Create())
-            {
-                var bytes = Encoding.UTF8.GetBytes(input);
-                var hash = sha.ComputeHash(bytes);
+            using var sha = SHA512.Create();
+            var bytes = Encoding.UTF8.GetBytes(input);
+            var hash = sha.ComputeHash(bytes);
 
-                return Convert.ToBase64String(hash);
-            }
+            return Convert.ToBase64String(hash);
         }
     }
 }

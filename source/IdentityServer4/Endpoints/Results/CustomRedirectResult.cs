@@ -34,8 +34,11 @@ namespace IdentityServer4.Endpoints.Results
         /// </exception>
         public CustomRedirectResult(ValidatedAuthorizeRequest request, string url)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-            if (url.IsMissing()) throw new ArgumentNullException(nameof(url));
+            if (request == null) 
+                throw new ArgumentNullException(nameof(request));
+
+            if (url.IsMissing())
+                throw new ArgumentNullException(nameof(url));
 
             _request = request;
             _url = url;
@@ -44,7 +47,7 @@ namespace IdentityServer4.Endpoints.Results
         internal CustomRedirectResult(
             ValidatedAuthorizeRequest request,
             string url,
-            IdentityServerOptions options) 
+            IdentityServerOptions options)
             : this(request, url)
         {
             _options = options;
@@ -54,7 +57,7 @@ namespace IdentityServer4.Endpoints.Results
 
         private void Init(HttpContext context)
         {
-            _options = _options ?? context.RequestServices.GetRequiredService<IdentityServerOptions>();
+            _options ??= context.RequestServices.GetRequiredService<IdentityServerOptions>();
         }
 
         /// <summary>
@@ -66,7 +69,8 @@ namespace IdentityServer4.Endpoints.Results
         {
             Init(context);
 
-            var returnUrl = context.GetIdentityServerBasePath().EnsureTrailingSlash() + Constants.ProtocolRoutePaths.Authorize;
+            var returnUrl = context.GetIdentityServerBasePath().EnsureTrailingSlash() +
+                            Constants.ProtocolRoutePaths.Authorize;
             returnUrl = returnUrl.AddQueryString(_request.Raw.ToQueryString());
 
             if (!_url.IsLocalUrl())

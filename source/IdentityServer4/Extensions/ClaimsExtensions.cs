@@ -1,9 +1,8 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
 using IdentityModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -54,7 +53,7 @@ namespace IdentityServer4.Extensions
             if (claim.ValueType == ClaimValueTypes.Integer ||
                 claim.ValueType == ClaimValueTypes.Integer32)
             {
-                if (Int32.TryParse(claim.Value, out int value))
+                if (int.TryParse(claim.Value, out int value))
                 {
                     return value;
                 }
@@ -62,7 +61,7 @@ namespace IdentityServer4.Extensions
 
             if (claim.ValueType == ClaimValueTypes.Integer64)
             {
-                if (Int64.TryParse(claim.Value, out long value))
+                if (long.TryParse(claim.Value, out long value))
                 {
                     return value;
                 }
@@ -80,7 +79,7 @@ namespace IdentityServer4.Extensions
             {
                 try
                 {
-                    return System.Text.Json.JsonSerializer.Deserialize<JsonElement>(claim.Value);
+                    return JsonSerializer.Deserialize<JsonElement>(claim.Value);
                 }
                 catch { }
             }

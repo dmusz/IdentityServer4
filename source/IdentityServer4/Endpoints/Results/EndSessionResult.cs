@@ -52,9 +52,9 @@ namespace IdentityServer4.Endpoints.Results
 
         private void Init(HttpContext context)
         {
-            _options = _options ?? context.RequestServices.GetRequiredService<IdentityServerOptions>();
-            _clock = _clock ?? context.RequestServices.GetRequiredService<ITimeProvider>();
-            _logoutMessageStore = _logoutMessageStore ?? context.RequestServices.GetRequiredService<IMessageStore<LogoutMessage>>();
+            _options ??= context.RequestServices.GetRequiredService<IdentityServerOptions>();
+            _clock ??= context.RequestServices.GetRequiredService<ITimeProvider>();
+            _logoutMessageStore ??= context.RequestServices.GetRequiredService<IMessageStore<LogoutMessage>>();
         }
 
         /// <summary>

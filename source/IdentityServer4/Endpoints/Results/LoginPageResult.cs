@@ -49,8 +49,8 @@ namespace IdentityServer4.Endpoints.Results
 
         private void Init(HttpContext context)
         {
-            _options = _options ?? context.RequestServices.GetRequiredService<IdentityServerOptions>();
-            _authorizationParametersMessageStore = _authorizationParametersMessageStore ?? context.RequestServices.GetService<IAuthorizationParametersMessageStore>();
+            _options ??= context.RequestServices.GetRequiredService<IdentityServerOptions>();
+            _authorizationParametersMessageStore ??= context.RequestServices.GetService<IAuthorizationParametersMessageStore>();
         }
 
         /// <summary>

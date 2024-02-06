@@ -27,10 +27,7 @@ namespace IdentityServer4.Validation
             var value = request.AuthenticationContextReferenceClasses
                 .FirstOrDefault(x => x.StartsWith(prefix));
 
-            if (value != null)
-            {
-                value = value.Substring(prefix.Length);
-            }
+            value = value?.Substring(prefix.Length);
 
             return value;
         }
@@ -68,7 +65,7 @@ namespace IdentityServer4.Validation
         {
             return request
                 .AuthenticationContextReferenceClasses
-                .Where(acr => !Constants.KnownAcrValues.All.Any(well_known => acr.StartsWith(well_known)))
+                .Where(acr => !Constants.KnownAcrValues.All.Any(acr.StartsWith))
                 .Distinct()
                 .ToArray();
         }
