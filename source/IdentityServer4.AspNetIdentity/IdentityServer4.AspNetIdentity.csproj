@@ -1,44 +1,44 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <PackageId>IdentityServer4.AspNetIdentity</PackageId>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-    
-    <Description>ASP.NET Core Identity Integration for IdentityServer4</Description>
-    <Authors>Brock Allen;Dominick Baier</Authors>
-    <AssemblyName>IdentityServer4.AspNetIdentity</AssemblyName>
-    <PackageTags>OAuth2;OAuth 2.0;OpenID Connect;Security;Identity;IdentityServer;ASP.NET Identity</PackageTags>
-    <PackageProjectUrl>https://github.com/IdentityServer/IdentityServer4</PackageProjectUrl>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>https://github.com/IdentityServer/IdentityServer4/releases</PackageReleaseNotes>
+    <PropertyGroup>
+        <PackageId>IdentityServer4.AspNetIdentity</PackageId>
+        <TargetFrameworks>net8.0</TargetFrameworks>
 
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <Description>ASP.NET Core Identity Integration for IdentityServer4</Description>
+        <Authors>Brock Allen;Dominick Baier</Authors>
+        <AssemblyName>IdentityServer4.AspNetIdentity</AssemblyName>
+        <PackageTags>OAuth2;OAuth 2.0;OpenID Connect;Security;Identity;IdentityServer;ASP.NET Identity</PackageTags>
+        <PackageProjectUrl>https://github.com/IdentityServer/IdentityServer4</PackageProjectUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageReleaseNotes>https://github.com/IdentityServer/IdentityServer4/releases</PackageReleaseNotes>
 
-    <AssemblyOriginatorKeyFile>../../key.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
-    <PublicSign Condition="'$(OS)' != 'Windows_NT'">true</PublicSign>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
+        <AssemblyOriginatorKeyFile>../../key.snk</AssemblyOriginatorKeyFile>
+        <SignAssembly>true</SignAssembly>
+        <PublicSign Condition="'$(OS)' != 'Windows_NT'">true</PublicSign>
 
-  <PropertyGroup>
-    <ContinuousIntegrationBuild Condition="'$(TF_BUILD)' == 'true'">True</ContinuousIntegrationBuild>
-    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
-  </PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-    
-  <ItemGroup>
-    
-    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
-  </ItemGroup>
-    
-  <ItemGroup>
-    <ProjectReference Include="..\IdentityServer4\IdentityServer4.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <ContinuousIntegrationBuild Condition="'$(TF_BUILD)' == 'true'">True</ContinuousIntegrationBuild>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+
+        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\IdentityServer4\IdentityServer4.csproj" />
+    </ItemGroup>
 
 </Project>

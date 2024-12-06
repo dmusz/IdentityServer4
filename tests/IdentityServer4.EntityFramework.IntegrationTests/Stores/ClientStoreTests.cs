@@ -3,7 +3,6 @@
 
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using IdentityServer4.EntityFramework.DbContexts;
@@ -21,7 +20,7 @@ namespace IdentityServer4.EntityFramework.IntegrationTests.Stores
     {
         public ClientStoreTests(DatabaseProviderFixture<ConfigurationDbContext> fixture) : base(fixture)
         {
-            foreach (var options in TestDatabaseProviders.SelectMany(x => x.Select(y => (DbContextOptions<ConfigurationDbContext>) y)).ToList())
+            foreach (var options in TestDatabaseProviders)
             {
                 using (var context = new ConfigurationDbContext(options, StoreOptions))
                 {

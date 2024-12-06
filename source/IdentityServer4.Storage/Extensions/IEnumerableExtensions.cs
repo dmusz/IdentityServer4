@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace IdentityServer4.Extensions
 {
-    internal static class IEnumerableExtensions
+    public static class IEnumerableExtensions
     {
         [DebuggerStepThrough]
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> list)

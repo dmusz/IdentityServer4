@@ -9,7 +9,6 @@ using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +22,7 @@ namespace IdentityServer4.EntityFramework.IntegrationTests.Services
     {
         public CorsPolicyServiceTests(DatabaseProviderFixture<ConfigurationDbContext> fixture) : base(fixture)
         {
-            foreach (var options in TestDatabaseProviders.SelectMany(x => x.Select(y => (DbContextOptions<ConfigurationDbContext>)y)).ToList())
+            foreach (var options in TestDatabaseProviders)
             {
                 using var context = new ConfigurationDbContext(options, StoreOptions);
                 context.Database.EnsureCreated();

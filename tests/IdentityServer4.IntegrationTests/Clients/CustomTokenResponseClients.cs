@@ -279,7 +279,7 @@ namespace IdentityServer.IntegrationTests.Clients
 
         private Dictionary<string, JsonElement> GetFields(TokenResponse response)
         {
-            var json = response.Json.GetRawText();
+            var json = response.Json.Value.GetRawText();
             return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
         }
     }

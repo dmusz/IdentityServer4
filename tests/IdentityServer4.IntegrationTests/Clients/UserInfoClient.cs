@@ -192,7 +192,7 @@ namespace IdentityServer.IntegrationTests.Clients
                 Token = response.AccessToken
             });
 
-            var values = userInfo.Json.ToObject<Dictionary<string, JsonElement>>();
+            var values = userInfo.Json.Value.ToObject<Dictionary<string, JsonElement>>();
             roles = values["role"].EnumerateArray().Select(x => x.ToString()).ToArray();
             roles.Length.Should().Be(2);
             roles.Should().Contain("Geek");

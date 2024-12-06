@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -50,7 +49,11 @@ namespace IdentityServer4.EntityFramework.IntegrationTests
 
         protected IntegrationTest(DatabaseProviderFixture<TDbContext> fixture)
         {
-            fixture.Options = TestDatabaseProviders.SelectMany(x => x.Select(y => (DbContextOptions<TDbContext>)y)).ToList();
+            fixture.Options = [];
+            foreach (var o in TestDatabaseProviders)
+            {
+                fixture.Options.Add(o);
+            }
             fixture.StoreOptions = StoreOptions;
         }
     }

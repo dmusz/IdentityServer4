@@ -180,7 +180,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
                 Token = tokenResponse.AccessToken
             });
 
-            var values = introspectionResponse.Json.ToObject<Dictionary<string, JsonElement>>();
+            var values = introspectionResponse.Json.Value.ToObject<Dictionary<string, JsonElement>>();
 
             values["aud"].ValueKind.Should().Be(JsonValueKind.String);
             values["iss"].ValueKind.Should().Be(JsonValueKind.String);
@@ -219,7 +219,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
                 Token = tokenResponse.AccessToken
             });
 
-            var values = introspectionResponse.Json.ToObject<Dictionary<string, JsonElement>>();
+            var values = introspectionResponse.Json.Value.ToObject<Dictionary<string, JsonElement>>();
 
             values["aud"].ValueKind.Should().Be(JsonValueKind.String);
             values["iss"].ValueKind.Should().Be(JsonValueKind.String);
@@ -258,7 +258,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
                 Token = tokenResponse.AccessToken
             });
 
-            var values = introspectionResponse.Json.ToObject<Dictionary<string, JsonElement>>();
+            var values = introspectionResponse.Json.Value.ToObject<Dictionary<string, JsonElement>>();
 
             values["aud"].GetType().Name.Should().Be("JsonElement");
 
@@ -302,7 +302,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
                 Token = tokenResponse.AccessToken
             });
 
-            var values = introspectionResponse.Json.ToObject<Dictionary<string, JsonElement>>();
+            var values = introspectionResponse.Json.Value.ToObject<Dictionary<string, JsonElement>>();
 
             values["aud"].ValueKind.Should().Be(JsonValueKind.String);
             values["iss"].ValueKind.Should().Be(JsonValueKind.String);
