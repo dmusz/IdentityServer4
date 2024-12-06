@@ -4,6 +4,7 @@
 
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using IdentityServer.UnitTests.Common;
 using IdentityServer4;
@@ -30,7 +31,7 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void EmptyContext()
+        public async Task EmptyContext()
         {
             var context = new DefaultHttpContext();
 
@@ -41,12 +42,11 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void Valid_BasicAuthentication_Request()
+        public async Task Valid_BasicAuthentication_Request()
         {
             var context = new DefaultHttpContext();
 
-            var headerValue = string.Format("Basic {0}",
-                Convert.ToBase64String(Encoding.UTF8.GetBytes("client:secret")));
+            var headerValue = $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes("client:secret"))}";
             context.Request.Headers.Append("Authorization", new StringValues(headerValue));
 
 
@@ -59,12 +59,11 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void Valid_BasicAuthentication_Request_With_UserName_Only_And_Colon_For_Optional_ClientSecret()
+        public async Task Valid_BasicAuthentication_Request_With_UserName_Only_And_Colon_For_Optional_ClientSecret()
         {
             var context = new DefaultHttpContext();
 
-            var headerValue = string.Format("Basic {0}",
-                Convert.ToBase64String(Encoding.UTF8.GetBytes("client:")));
+            var headerValue = $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes("client:"))}";
             context.Request.Headers.Append("Authorization", new StringValues(headerValue));
 
             var secret = await _parser.ParseAsync(context);
@@ -76,7 +75,7 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void BasicAuthentication_Request_With_Empty_Basic_Header()
+        public async Task BasicAuthentication_Request_With_Empty_Basic_Header()
         {
             var context = new DefaultHttpContext();
 
@@ -89,15 +88,14 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void Valid_BasicAuthentication_Request_ClientId_Too_Long()
+        public async Task Valid_BasicAuthentication_Request_ClientId_Too_Long()
         {
             var context = new DefaultHttpContext();
 
             var longClientId = "x".Repeat(_options.InputLengthRestrictions.ClientId + 1);
-            var credential = string.Format("{0}:secret", longClientId);
+            var credential = $"{longClientId}:secret";
 
-            var headerValue = string.Format("Basic {0}",
-                Convert.ToBase64String(Encoding.UTF8.GetBytes(credential)));
+            var headerValue = $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes(credential))}";
             context.Request.Headers.Append("Authorization", new StringValues(headerValue));
 
             var secret = await _parser.ParseAsync(context);
@@ -106,15 +104,14 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void Valid_BasicAuthentication_Request_ClientSecret_Too_Long()
+        public async Task Valid_BasicAuthentication_Request_ClientSecret_Too_Long()
         {
             var context = new DefaultHttpContext();
 
             var longClientSecret = "x".Repeat(_options.InputLengthRestrictions.ClientSecret + 1);
-            var credential = string.Format("client:{0}", longClientSecret);
+            var credential = $"client:{longClientSecret}";
 
-            var headerValue = string.Format("Basic {0}",
-                Convert.ToBase64String(Encoding.UTF8.GetBytes(credential)));
+            var headerValue = $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes(credential))}";
             context.Request.Headers.Append("Authorization", new StringValues(headerValue));
 
             var secret = await _parser.ParseAsync(context);
@@ -123,7 +120,7 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void BasicAuthentication_Request_With_Empty_Basic_Header_Variation()
+        public async Task BasicAuthentication_Request_With_Empty_Basic_Header_Variation()
         {
             var context = new DefaultHttpContext();
 
@@ -136,7 +133,7 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void BasicAuthentication_Request_With_Unknown_Scheme()
+        public async Task BasicAuthentication_Request_With_Unknown_Scheme()
         {
             var context = new DefaultHttpContext();
 
@@ -149,7 +146,7 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void BasicAuthentication_Request_With_Malformed_Credentials_NoBase64_Encoding()
+        public async Task BasicAuthentication_Request_With_Malformed_Credentials_NoBase64_Encoding()
         {
             var context = new DefaultHttpContext();
 
@@ -162,12 +159,11 @@ namespace IdentityServer.UnitTests.Validation.Secrets
 
         [Fact]
         [Trait("Category", Category)]
-        public async void BasicAuthentication_Request_With_Malformed_Credentials_Base64_Encoding_UserName_Only()
+        public async Task BasicAuthentication_Request_With_Malformed_Credentials_Base64_Encoding_UserName_Only()
         {
             var context = new DefaultHttpContext();
 
-            var headerValue = string.Format("Basic {0}",
-                Convert.ToBase64String(Encoding.UTF8.GetBytes("client")));
+            var headerValue = $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes("client"))}";
             context.Request.Headers.Append("Authorization", new StringValues(headerValue));
 
             var secret = await _parser.ParseAsync(context);
